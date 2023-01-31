@@ -4,7 +4,7 @@
 #include "stdlib.h"
 #include "stdbool.h"
 
-Data readArray(char *dirToFile) {
+Data *readArray(char *dirToFile, int *arraySize) {
     FILE *fp;
 
     if ((fp = fopen(dirToFile, "r+")) == NULL) {
@@ -28,34 +28,54 @@ Data readArray(char *dirToFile) {
     printf("%s\n", wordsArray);
     free(item);
 
-    Data *dataArray;
+    Data *dataArray = NULL;
 
-    int arraySize = 0;
-    printf("here\n");
+    *arraySize = 0;
+    char **linesArray = NULL;
+    int linesArraySize = 0;
+
     char *subData = strtok(wordsArray, ";");
     while (subData != NULL) {
+        if (0 != strcmp(subData, " ")) {
+            linesArray = realloc(linesArray, (1 + linesArraySize) * sizeof(char *));
+            linesArray[linesArraySize] = strdup(subData);
+            linesArraySize += 1;
+        }
+        subData = strtok(NULL, ";");
+    }
+    //printf();
+    for (int lineIdx = 0; lineIdx < linesArraySize; lineIdx++) {
 
         Data dataItem;
-        char uid[8];
+        char uid[9];
         char *name;
         int count;
-        char *subField = strtok(NULL, ",");
+        char *subField = strtok(linesArray[lineIdx], ",");
 
         for (int i = 0; i < 3; i++) {
+
+            printf("subfield \"%s\"\n", subField);
+
             if (subField == NULL) {
-                printf("Error");
+                printf("Error5");
                 exit(-1);
             }
             switch (i) {
                 case 0:
-                    if (strlen(uid) != 8) {
-                        printf("Error");
+                    while (subField[0] == ' ') {
+                        for (int z = 0; z < strlen(subField); z++)
+                            subField[z] = subField[z + 1];
+                    }
+
+                    if (strlen(subField) != 8) {
+                        printf("error: \"%s\"\n", subField);
+                        printf("Error6");
                         exit(-1);
                     }
                     for (int q = 0; q < 8; q++)uid[q] = subField[q];
                     break;
                 case 1:
-                    name = strdup(subField);
+                    name = (subField);
                     break;
                 case 2:
                     count = atoi(subField);
@@ -63,23 +83,48 @@ Data readArray(char *dirToFile) {
             }
             subField = strtok(NULL, ",");
         }
-
+        uid[8] = '\0';
+        printf("NOT FROM CASE 1 subfield \"%s\"\n", name);
+        /*dataItem.name = calloc(strlen(name) + 1, sizeof(char));
         dataItem.name = name;
-        for (int q = 0; q < 8; q++) dataItem.idx[q] = uid[q];
-        dataItem.count = count;
+        for (int q = 0; q < 9; q++) dataItem.idx[q] = uid[q];
+        dataItem.count = count;*/
 
-        dataArray = realloc(dataArray, arraySize + 1);
-        dataArray[arraySize] = dataItem;
-        arraySize += 1;
-
-        subData = strtok(NULL, ";");
+        dataArray = realloc(dataArray, (*arraySize + 1) * sizeof(Data));
+        dataArray[*arraySize].name = strdup(name);
+        for (int q = 0; q < 9; q++) dataArray[*arraySize].idx[q] = uid[q];
+        dataArray[*arraySize].count = count;
+        *arraySize += 1;
     }
 
-    printf("count of el: %d\n", arraySize);
-    for (int i = 0; i < arraySize; i++) {
+
+    printf("count of el: %d\n", *arraySize);
+    for (int i = 0; i < *arraySize; i++) {
         printf("uid: %s\n", dataArray[i].idx);
         printf("name: %s\n", dataArray[i].name);
         printf("count: %d\n\n", dataArray[i].count);
     }
 
+    for (int i = 0; i < linesArraySize; ++i) {
+        free(linesArray[i]);
+    }
+    free(linesArray);
+    free(wordsArray);
+
+    return dataArray;
+}
+
+void writeArray(Data *dataArray, int dataArrayLen, char *outputDir) {
+    FILE *f;
+
+
+    if ((f = fopen(outputDir, "w")) == NULL) {
+        printf("Error\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < dataArrayLen; i++)
+        fprintf(f, "%s, %s, %d;\n", dataArray[i].idx, dataArray[i].name, dataArray[i].count);
+
+    fclose(f);
 }

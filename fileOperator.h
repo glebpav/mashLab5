@@ -4,11 +4,12 @@
 #include <stdlib.h>
 
 typedef struct Data {
-    char idx[8];
+    char idx[9];
     char *name;
     int count;
 }Data;
 
-Data readArray(char *dirToFile);
+Data *readArray(char *dirToFile, int *arraySize);
+void writeArray(Data *dataArray, int dataArrayLen, char *outputDir);
 
 #endif //MASHLAB5_FILEOPERATOR_H

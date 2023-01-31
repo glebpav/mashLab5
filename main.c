@@ -4,19 +4,23 @@
 #include "stdlib.h"
 #include "getopt.h"
 #include "fileOperator.h"
+#include "sortingOpereator.h"
 
 
 int main(int argc, char **argv) {
 
 
     // input params
-    int algorithm;
-    int field;
-    int direction;
+
+    int algorithm;      // 0 - qsort, 1 - gnome, 2 - pair
+    int field;          // 0 - uid,   2 - name,  2 - count
+    int direction;      // 0 - from big to small, 1 - from small to big
     char *inputDir;
     char *outputDir;
+
     // --------------
 
+    int dataArraySize = 0;
     int opt;
 
     while ((opt = getopt(argc, argv, "d:a:v:")) != -1) {
@@ -54,7 +58,21 @@ int main(int argc, char **argv) {
         }
     }
 
-    readArray(inputDir);
+    Data *dataArray = readArray(inputDir, &dataArraySize);
+    sortArray(&dataArray, dataArraySize, direction, algorithm, field);
 
+    printf("\noutput array: \n");
+    for (int i = 0; i < dataArraySize; i++) {
+        printf("[%d] uid: %s\n", i , dataArray[i].idx);
+        printf("[%d] name: %s\n", i , dataArray[i].name);
+        printf("[%d] count: %d\n\n", i , dataArray[i].count);
+    }
+
+    writeArray(dataArray, dataArraySize, outputDir);
+
+    for (int i = 0; i < dataArraySize; ++i) {
+        free(dataArray[i].name);
+    }
+    free(dataArray);
     return 0;
 }
