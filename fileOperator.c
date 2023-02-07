@@ -2,7 +2,6 @@
 #include "fileOperator.h"
 #include "string.h"
 #include "stdlib.h"
-#include "stdbool.h"
 
 Data *readArray(char *dirToFile, int *arraySize) {
     FILE *fp;
@@ -84,11 +83,6 @@ Data *readArray(char *dirToFile, int *arraySize) {
             subField = strtok(NULL, ",");
         }
         uid[8] = '\0';
-        printf("NOT FROM CASE 1 subfield \"%s\"\n", name);
-        /*dataItem.name = calloc(strlen(name) + 1, sizeof(char));
-        dataItem.name = name;
-        for (int q = 0; q < 9; q++) dataItem.idx[q] = uid[q];
-        dataItem.count = count;*/
 
         dataArray = realloc(dataArray, (*arraySize + 1) * sizeof(Data));
         dataArray[*arraySize].name = strdup(name);
@@ -116,7 +110,6 @@ Data *readArray(char *dirToFile, int *arraySize) {
 
 void writeArray(Data *dataArray, int dataArrayLen, char *outputDir) {
     FILE *f;
-
 
     if ((f = fopen(outputDir, "w")) == NULL) {
         printf("Error\n");

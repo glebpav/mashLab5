@@ -9,11 +9,10 @@
 
 int main(int argc, char **argv) {
 
-
     // input params
 
     int algorithm;      // 0 - qsort, 1 - gnome, 2 - pair
-    int field;          // 0 - uid,   2 - name,  2 - count
+    int field;          // 0 - uid,   1 - name,  2 - count
     int direction;      // 0 - from big to small, 1 - from small to big
     char *inputDir;
     char *outputDir;
@@ -23,6 +22,7 @@ int main(int argc, char **argv) {
     int dataArraySize = 0;
     int opt;
 
+    // чтение опций из консоли
     while ((opt = getopt(argc, argv, "d:a:v:")) != -1) {
         int inputValue = atoi(optarg);
         switch (opt) {
@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    // чтение позиционных аршгументов
     for (; optind < argc; optind++) {
         if (optind == 7) {
             inputDir = argv[optind];
@@ -57,6 +58,7 @@ int main(int argc, char **argv) {
             outputDir = argv[optind];
         }
     }
+
 
     Data *dataArray = readArray(inputDir, &dataArraySize);
     sortArray(&dataArray, dataArraySize, direction, algorithm, field);

@@ -113,17 +113,17 @@ double sortArray(Data **array, int arraySize, int direction, int algorithm, int 
         gnome(*array, arraySize, sizeof(Data), comparatorCount2);
 
     else if (field == 0 && algorithm == 2 && direction == 0)
-        qsort(*array, arraySize, sizeof(Data), comparatorIdx1);
+        pair(*array, arraySize, sizeof(Data), comparatorIdx1);
     else if (field == 0 && algorithm == 2 && direction == 1)
-        qsort(*array, arraySize, sizeof(Data), comparatorIdx2);
+        pair(*array, arraySize, sizeof(Data), comparatorIdx2);
     else if (field == 1 && algorithm == 2 && direction == 0)
-        qsort(*array, arraySize, sizeof(Data), comparatorName1);
+        pair(*array, arraySize, sizeof(Data), comparatorName1);
     else if (field == 1 && algorithm == 2 && direction == 1)
-        qsort(*array, arraySize, sizeof(Data), comparatorName2);
+        pair(*array, arraySize, sizeof(Data), comparatorName2);
     else if (field == 2 && algorithm == 2 && direction == 0)
-        qsort(*array, arraySize, sizeof(Data), comparatorCount1);
+        pair(*array, arraySize, sizeof(Data), comparatorCount1);
     else if (field == 2 && algorithm == 2 && direction == 1)
-        qsort(*array, arraySize, sizeof(Data), comparatorCount2);
+        pair(*array, arraySize, sizeof(Data), comparatorCount2);
 
 }
 

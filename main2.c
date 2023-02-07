@@ -71,18 +71,21 @@ int main(int argc, char **argv) {
     }
 
     for (int arrayIdx = 0; arrayIdx < numOfArray; ++arrayIdx) {
+
         Data *dataArray = calloc(numOfElements, sizeof(Data));
         for (int i = 0; i < numOfElements; i++) {
             dataArray[i].count = (rand() * 1000) % 1000;
             dataArray[i].name = generateStr(16);
             for (int j = 0; j < 8; ++j) dataArray[i].idx[j] = generateChar();
         }
+
         begin = clock();
         sortArray(&dataArray, numOfElements, direction, algorithm, field);
         end = clock();
         for (int i = 0; i < numOfElements; ++i) free(dataArray[i].name);
         free(dataArray);
         fullTime += end - begin;
+
     }
 
     printf("avg time of sorting: %f\n", fullTime / numOfArray / CLOCKS_PER_SEC);
