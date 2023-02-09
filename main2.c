@@ -10,7 +10,7 @@
 
 char *generateStr(int len) {
     const char alphabet[] = "QWERTYUIOPASDFGHJKLZXCVBNMabcdefghijklmnopqrstuvwxyz";
-    char *str = calloc(len, sizeof(len));
+    char *str = calloc(len + 1, sizeof(char));
     for (int i = 0; i < len; i++) str[i] = alphabet[rand() % (int) (sizeof alphabet - 1)];
     return str;
 }
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     // --------------
 
     int opt;
-    double fullTime, begin, end;
+    double fullTime = 0., begin, end;
 
     while ((opt = getopt(argc, argv, "d:a:v:")) != -1) {
         int inputValue = atoi(optarg);
@@ -72,11 +72,12 @@ int main(int argc, char **argv) {
 
     for (int arrayIdx = 0; arrayIdx < numOfArray; ++arrayIdx) {
 
-        Data *dataArray = calloc(numOfElements, sizeof(Data));
+        Data *dataArray = malloc(numOfElements * sizeof(Data));
         for (int i = 0; i < numOfElements; i++) {
             dataArray[i].count = (rand() * 1000) % 1000;
             dataArray[i].name = generateStr(16);
             for (int j = 0; j < 8; ++j) dataArray[i].idx[j] = generateChar();
+            dataArray[i].idx[8] = '\0';
         }
 
         begin = clock();
@@ -88,6 +89,7 @@ int main(int argc, char **argv) {
 
     }
 
-    printf("avg time of sorting: %f\n", fullTime / numOfArray / CLOCKS_PER_SEC);
+    double finalTime = (fullTime / numOfArray) / CLOCKS_PER_SEC;
+    printf("avg time of sorting: %f\n", finalTime);
     return 0;
 }
